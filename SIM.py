@@ -102,16 +102,16 @@ else:
         st.write("Silakan pilih menu di samping untuk mengelola data produksi, penjualan, stok, dan laporan keuangan.")
     elif halaman == "Produksi":
         st.markdown("---")
-        
+        # Konten produksi bisa ditambahkan di sini
     elif halaman == "Penjualan":
         st.markdown("---")
-        
+        # Konten penjualan bisa ditambahkan di sini
     elif halaman == "Isi Stok":
         st.markdown("---")
-        
+        # Konten isi stok bisa ditambahkan di sini
     elif halaman == "Laporan":
         st.markdown("---")
-        
+        # Konten laporan bisa ditambahkan di sini
         
     # HALAMAN HOME
     if halaman == 'Home':
@@ -152,7 +152,6 @@ else:
             }])
             df = pd.concat([df, new], ignore_index=True)
             simpan_data(df, PRODUKSI_FILE)
-            
 
             df_keuangan = load_data(KEUANGAN_FILE)
             transaksi_keuangan = pd.DataFrame([
