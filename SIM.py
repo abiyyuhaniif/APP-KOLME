@@ -38,7 +38,14 @@ def simpan_stok(stok_baru):
     df = pd.DataFrame([{"Stok": stok_baru}])
     df.to_csv(STOK_FILE, index=False)
 
-# SISTEM CEK STATUS LOGIN
+# Setup file login
+os.makedirs("data", exist_ok=True)
+LOGIN_STATUS_FILE = 'data/login_status.csv'
+
+ALLOWED_USERS = ["admin1@kolme.com", "admin2@kolme.com", "admin3@kolme.com", "admin4@kolme.com"]
+PASSWORD = "kol123"
+
+# Fungsi bantu
 def is_user_logged_in(username):
     if os.path.exists(LOGIN_STATUS_FILE):
         df = pd.read_csv(LOGIN_STATUS_FILE)
@@ -46,30 +53,39 @@ def is_user_logged_in(username):
     return False
 
 def set_user_login_status(username, status):
-    if status:  # login
+    if status:
         df = pd.read_csv(LOGIN_STATUS_FILE) if os.path.exists(LOGIN_STATUS_FILE) else pd.DataFrame(columns=["username"])
         if username not in df["username"].values:
             df.loc[len(df)] = [username]
             df.to_csv(LOGIN_STATUS_FILE, index=False)
-    else:  # logout
+    else:
         if os.path.exists(LOGIN_STATUS_FILE):
             df = pd.read_csv(LOGIN_STATUS_FILE)
             df = df[df["username"] != username]
             df.to_csv(LOGIN_STATUS_FILE, index=False)
 
-# SISTEM LOGIN
-ALLOWED_USERS = ["admin1@kolme.com", "admin2@kolme.com", "admin3@kolme.com", "admin4@kolme.com"]
-PASSWORD = "kol123"
-
+# Inisialisasi session
 if "login" not in st.session_state:
     st.session_state["login"] = False
 
+# Tampilan login
 if not st.session_state["login"]:
-    st.title(":material/person: Login Sistem KOL-ME")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        st.image("assets/LOGO_KECIL.png", width=160)
+    with col2:
+        st.title("Selamat Datang di ""KOL-ME")
+        
 
-    if st.button(":material/login: Login"):
+    st.divider()
+
+    st.subheader(":material/lock: Login Admin")
+    st.info("Hanya admin resmi KOL-ME yang dapat masuk.")
+
+    username = st.text_input(":material/contact_mail: Email")
+    password = st.text_input(":material/key: Kata Sandi", type="password")
+
+    if st.button(":material/login: Masuk"):
         if username in ALLOWED_USERS and password == PASSWORD:
             if is_user_logged_in(username):
                 st.error("❌ Pengguna ini sedang login di tempat lain.")
@@ -77,10 +93,14 @@ if not st.session_state["login"]:
                 set_user_login_status(username, True)
                 st.session_state["login"] = True
                 st.session_state["username"] = username
-                st.success("Login berhasil!")
+                st.success("✅ Login berhasil! Selamat datang, Admin.")
                 st.rerun()
         else:
-            st.error("Username atau password salah.")
+            st.warning("Username atau password salah. Coba lagi.")
+
+
+    st.divider()
+    st.caption(":material/forest: Sistem pertanian digital KOL-ME ")
             
 else:
     # Sidebar Navigasi
