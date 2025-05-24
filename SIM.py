@@ -85,7 +85,7 @@ if not st.session_state["login"]:
     username = st.text_input(":material/contact_mail: Email")
     password = st.text_input(":material/key: Kata Sandi", type="password")
 
-    if st.button(":material/login: Masuk"):
+    if st.button(":material/login: Login"):
         if username in ALLOWED_USERS and password == PASSWORD:
             if is_user_logged_in(username):
                 st.error("❌ Pengguna ini sedang login di tempat lain.")
@@ -93,10 +93,10 @@ if not st.session_state["login"]:
                 set_user_login_status(username, True)
                 st.session_state["login"] = True
                 st.session_state["username"] = username
-                st.success("✅ Login berhasil! Selamat datang, Admin.")
+                st.success("Login berhasil!")
                 st.rerun()
         else:
-            st.warning("Username atau password salah. Coba lagi.")
+            st.error("Username atau password salah. Coba lagi.")
 
 
     st.divider()
